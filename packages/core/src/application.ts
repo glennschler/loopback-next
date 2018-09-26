@@ -192,6 +192,16 @@ export class Application extends Context {
     const instance = this.getSync<Component>(componentKey);
     mountComponent(this, instance);
   }
+
+  /**
+   * Set application metadata. By default, the content of `package.json` is
+   * loaded and populated.
+   *
+   * @param metadata Application metadata
+   */
+  public setMetadata(metadata: ApplicationMetadata) {
+    this.bind(CoreBindings.APPLICATION_METADATA).to(metadata);
+  }
 }
 
 /**
@@ -207,3 +217,14 @@ export interface ApplicationConfig {
 
 // tslint:disable-next-line:no-any
 export type ControllerClass = Constructor<any>;
+
+/**
+ * Type description for `package.json`
+ */
+export interface ApplicationMetadata {
+  name: string;
+  version: string;
+  description: string;
+  // tslint:disable-next-line:no-any
+  [name: string]: any;
+}
