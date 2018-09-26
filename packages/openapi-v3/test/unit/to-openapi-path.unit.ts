@@ -8,15 +8,8 @@ import {expect} from '@loopback/testlab';
 import {toOpenApiPath} from '../../src/controller-spec';
 
 describe('toOpenApiPath', () => {
-  it('allows /:foo/bar', () => {
-    const path = toOpenApiPath('/:foo');
-    expect(path).to.eql('/{foo}');
-  });
-
-  it('allows /:foo/bar', () => {
-    const path = toOpenApiPath('/:foo/bar');
-    expect(path).to.eql('/{foo}/bar');
-  });
+  const INVALID_PARAM = /Invalid path template: '.+'. Please use \{param\} instead of '\:param'/;
+  const NO_PARAM_MODIFIER = /Parameter modifier is not allowed in path/;
 
   it('allows /{foo}/bar', () => {
     const path = toOpenApiPath('/{foo}/bar');
@@ -28,33 +21,51 @@ describe('toOpenApiPath', () => {
     expect(path).to.eql('/{foo}/{bar}');
   });
 
+  it('disallows /:foo/bar', () => {
+    disallows('/:foo/bar');
+  });
+
+  it('disallows /:foo/:bar', () => {
+    disallows('/:foo/:bar');
+  });
+
   it('disallows /:foo+', () => {
-    expect(() => toOpenApiPath('/:foo+')).to.throw(
-      /Parameter modifier is not allowed/,
-    );
+    disallows('/:foo+');
   });
 
   it('disallows /:foo?', () => {
-    expect(() => toOpenApiPath('/:foo?')).to.throw(
-      /Parameter modifier is not allowed/,
-    );
+    disallows('/:foo?');
   });
 
   it('disallows /:foo*', () => {
-    expect(() => toOpenApiPath('/:foo*')).to.throw(
-      /Parameter modifier is not allowed/,
-    );
+    disallows('/:foo*');
   });
 
   it('disallows /:foo(\\d+)', () => {
-    expect(() => toOpenApiPath('/:foo(\\d+)')).to.throw(
-      /Parameter modifier is not allowed/,
-    );
+    disallows('/:foo(\\d+)');
   });
 
   it('disallows /foo/(.*)', () => {
-    expect(() => toOpenApiPath('/foo/(.*)')).to.throw(
-      /Unnamed parameter is not allowed/,
-    );
+    disallows('/foo/(.*)');
   });
+
+  it('disallows /{foo}+', () => {
+    disallows('/{foo}+', NO_PARAM_MODIFIER);
+  });
+
+  it('disallows /{foo}?', () => {
+    disallows('/{foo}?', NO_PARAM_MODIFIER);
+  });
+
+  it('disallows /{foo}*', () => {
+    disallows('/{foo}*', NO_PARAM_MODIFIER);
+  });
+
+  it('disallows /{foo}(\\d+)', () => {
+    disallows('/{foo}(\\d+)');
+  });
+
+  function disallows(path: string, pattern?: RegExp) {
+    expect(() => toOpenApiPath(path)).to.throw(pattern || INVALID_PARAM);
+  }
 });

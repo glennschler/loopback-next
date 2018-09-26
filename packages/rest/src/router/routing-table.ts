@@ -32,10 +32,9 @@ import {ControllerSpec} from '@loopback/openapi-v3';
 import * as assert from 'assert';
 const debug = require('debug')('loopback:rest:routing-table');
 
-// TODO(bajtos) Refactor this code to use Trie-based lookup,
-// e.g. via wayfarer/trie or find-my-way
-// See https://github.com/strongloop/loopback-next/issues/98
-import * as pathToRegexp from 'path-to-regexp';
+const wayfarer = require('wayfarer');
+const walk = require('wayfarer/walk');
+
 import {CoreBindings} from '@loopback/core';
 
 /**
@@ -61,7 +60,7 @@ export type ControllerClass<T extends ControllerInstance> = Constructor<T>;
  * Routing table
  */
 export class RoutingTable {
-  private readonly _routes: RouteEntry[] = [];
+  private readonly _router = wayfarer();
 
   /**
    * Register a controller as the route
@@ -126,19 +125,23 @@ export class RoutingTable {
         describeOperationParameters(route.spec),
       );
     }
-    this._routes.push(route);
+    // Add the route to the trie
+    const path = route.path.startsWith('/') ? route.path : `/${route.path}`;
+    const verb = route.verb.toLowerCase() || 'get';
+    this._router.on(`/${verb}${path}`, (params: object) => ({route, params}));
   }
 
   describeApiPaths(): PathObject {
     const paths: PathObject = {};
 
-    for (const route of this._routes) {
+    walk(this._router, (r: unknown, cb: Function) => {
+      const route = cb().route;
       if (!paths[route.path]) {
         paths[route.path] = {};
       }
 
       paths[route.path][route.verb] = route.spec;
-    }
+    });
 
     return paths;
   }
@@ -148,11 +151,24 @@ export class RoutingTable {
    * @param request
    */
   find(request: Request): ResolvedRoute {
-    for (const entry of this._routes) {
-      const match = entry.match(request);
-      if (match) return match;
+    debug('Finding route %s for %s %s', request.method, request.path);
+    const method = request.method.toLowerCase();
+    const path = `/${method}${request.path}`;
+    try {
+      const found = this._router(path);
+      debug('Route matched: %j', found);
+
+      if (found) {
+        const route = found.route;
+        debug('Route found: %s', inspect(route, {depth: 5}));
+        return createResolvedRoute(route, found.params);
+      }
+    } catch (err) {
+      debug('Match failed:', err);
+      // Ignore the error, will report as NotFound
     }
 
+    debug('No route found for %s %s', request.method, request.path);
     throw new HttpErrors.NotFound(
       `Endpoint "${request.method} ${request.path}" not found.`,
     );
@@ -175,12 +191,6 @@ export interface RouteEntry {
    * OpenAPI operation spec
    */
   readonly spec: OperationObject;
-
-  /**
-   * Map an http request to a route
-   * @param request
-   */
-  match(request: Request): ResolvedRoute | undefined;
 
   /**
    * Update bindings for the request context
@@ -221,8 +231,6 @@ export interface ResolvedRoute extends RouteEntry {
  */
 export abstract class BaseRoute implements RouteEntry {
   public readonly verb: string;
-  private readonly _keys: pathToRegexp.Key[] = [];
-  private readonly _pathRegexp: RegExp;
 
   /**
    * Construct a new route
@@ -239,30 +247,7 @@ export abstract class BaseRoute implements RouteEntry {
 
     // In Swagger, path parameters are wrapped in `{}`.
     // In Express.js, path parameters are prefixed with `:`
-    path = path.replace(/{([^}]*)}(\/|$)/g, ':$1$2');
-    this._pathRegexp = pathToRegexp(path, this._keys, {
-      strict: false,
-      end: true,
-    });
-  }
-
-  match(request: Request): ResolvedRoute | undefined {
-    debug('trying endpoint %s', inspect(this, {depth: 5}));
-    if (this.verb !== request.method!.toLowerCase()) {
-      debug(' -> verb mismatch');
-      return undefined;
-    }
-
-    const match = this._pathRegexp.exec(request.path);
-    if (!match) {
-      debug(' -> path mismatch');
-      return undefined;
-    }
-
-    const pathParams = this._buildPathParams(match);
-    debug(' -> found with params: %j', pathParams);
-
-    return createResolvedRoute(this, pathParams);
+    this.path = path.replace(/{([A-Za-z0-9_]*)}/g, ':$1');
   }
 
   abstract updateBindings(requestContext: Context): void;
@@ -274,16 +259,6 @@ export abstract class BaseRoute implements RouteEntry {
 
   describe(): string {
     return `"${this.verb} ${this.path}"`;
-  }
-
-  private _buildPathParams(pathMatch: RegExpExecArray): PathParameterValues {
-    const pathParams = Object.create(null);
-    for (const ix in this._keys) {
-      const key = this._keys[ix];
-      const matchIndex = +ix + 1;
-      pathParams[key.name] = pathMatch[matchIndex];
-    }
-    return pathParams;
   }
 }
 

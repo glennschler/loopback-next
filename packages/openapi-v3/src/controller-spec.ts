@@ -277,18 +277,25 @@ export function getControllerSpec(constructor: Function): ControllerSpec {
   return spec;
 }
 
-function validatePath(path: string = '') {
-  path = path.replace(/{([^}]*)}(\/|$)/g, ':$1$2');
-  const tokens = pathToRegExp.parse(path);
+function validatePath(path: string = '/') {
+  let tokens = pathToRegExp.parse(path);
+  if (tokens.some(t => typeof t === 'object')) {
+    throw new Error(
+      `Invalid path template: '${path}'. Please use {param} instead of ':param'`,
+    );
+  }
+
+  path = path.replace(/{([A-Za-z0-9_]*)}/g, ':$1');
+  tokens = pathToRegExp.parse(path);
   for (const token of tokens) {
     if (typeof token === 'string') continue;
     if (typeof token.name === 'number') {
       // Such as /(.*)
-      throw new Error('Unnamed parameter is not allowed in path ' + path);
+      throw new Error(`Unnamed parameter is not allowed in path '${path}'`);
     }
     if (token.optional || token.repeat || token.pattern !== '[^\\/]+?') {
       // Such as /:foo*, /:foo+, /:foo?, or /:foo(\\d+)
-      throw new Error('Parameter modifier is not allowed in path ' + path);
+      throw new Error(`Parameter modifier is not allowed in path '${path}'`);
     }
   }
   return path;
@@ -300,7 +307,7 @@ function validatePath(path: string = '') {
  *
  * @param path Express style path (https://github.com/pillarjs/path-to-regexp)
  */
-export function toOpenApiPath(path: string = '') {
+export function toOpenApiPath(path: string = '/') {
   validatePath(path);
-  return path.replace(/\:([A-Za-z0-9_]+)/g, '{$1}');
+  return path;
 }

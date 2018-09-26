@@ -47,7 +47,8 @@
     "path-to-regexp": "^2.2.0",
     "qs": "^6.5.2",
     "strong-error-handler": "^3.2.0",
-    "validator": "^10.4.0"
+    "validator": "^10.4.0",
+    "wayfarer": "^6.6.4"
   },
   "devDependencies": {
     "@loopback/build": "^0.7.5",
