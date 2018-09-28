@@ -9,6 +9,7 @@
   "engines": {
     "node": ">=8.9"
   },
+  "types": "./dist10/index.d.ts",
   "scripts": {
     "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build:apidocs": "lb-apidocs",
@@ -25,9 +26,9 @@
     "tslint": "lb-tslint",
     "tslint:fix": "npm run tslint -- --fix",
     "pretest": "npm run clean && npm run build",
-    "test": "lb-mocha DIST/test",
+    "test": "lb-mocha DIST/__tests__",
     "posttest": "npm run lint",
-    "test:dev": "lb-mocha --allow-console-logs DIST/test/**/*.js && npm run posttest",
+    "test:dev": "lb-mocha --allow-console-logs DIST/__tests__/**/*.js && npm run posttest",
     "prestart": "npm run build",
     "start": "node ."
   },

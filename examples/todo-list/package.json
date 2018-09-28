@@ -6,6 +6,7 @@
   "engines": {
     "node": ">=8.9"
   },
+  "types": "./dist10/index.d.ts",
   "scripts": {
     "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build:apidocs": "lb-apidocs",
@@ -22,8 +23,8 @@
     "tslint": "lb-tslint",
     "tslint:fix": "npm run tslint -- --fix",
     "pretest": "npm run build",
-    "test": "lb-mocha \"DIST/test/*/**/*.js\"",
-    "test:dev": "lb-mocha --allow-console-logs DIST/test/**/*.js && npm run posttest",
+    "test": "lb-mocha \"DIST/__tests__/*/**/*.js\"",
+    "test:dev": "lb-mocha --allow-console-logs DIST/__tests__/**/*.js && npm run posttest",
     "verify": "npm pack && tar xf loopback-todo-list*.tgz && tree package && npm run clean",
     "prestart": "npm run build",
     "start": "node ."

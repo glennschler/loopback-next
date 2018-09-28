@@ -5,18 +5,19 @@
   "engines": {
     "node": ">=8.9"
   },
+  "types": "./dist10/index.d.ts",
   "scripts": {
-    "acceptance": "lb-mocha \"DIST/test/acceptance/**/*.js\"",
+    "acceptance": "lb-mocha \"DIST/__tests__/acceptance/**/*.js\"",
     "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc",
     "build:dist8": "lb-tsc es2017",
     "build:dist10": "lb-tsc es2018",
     "clean": "lb-clean loopback-authentication*.tgz dist* package api-docs",
-    "integration": "lb-mocha \"DIST/test/integration/**/*.js\"",
+    "integration": "lb-mocha \"DIST/__tests__/integration/**/*.js\"",
     "pretest": "npm run build",
-    "test": "lb-mocha \"DIST/test/unit/**/*.js\" \"DIST/test/integration/**/*.js\" \"DIST/test/acceptance/**/*.js\"",
-    "unit": "lb-mocha \"DIST/test/unit/**/*.js\"",
+    "test": "lb-mocha \"DIST/__tests__/unit/**/*.js\" \"DIST/__tests__/integration/**/*.js\" \"DIST/__tests__/acceptance/**/*.js\"",
+    "unit": "lb-mocha \"DIST/__tests__/unit/**/*.js\"",
     "verify": "npm pack && tar xf loopback-authentication*.tgz && tree package && npm run clean"
   },
   "author": "IBM",

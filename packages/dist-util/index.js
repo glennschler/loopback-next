@@ -6,6 +6,7 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs');
 const util = require('util');
 const semver = require('semver');
 
@@ -33,7 +34,12 @@ function getDist() {
 
 function loadDist(projectRootDir) {
   const dist = getDist();
-  return require(path.join(projectRootDir, dist));
+  const distDir = path.join(projectRootDir, dist);
+  if (fs.existsSync(distDir)) {
+    return require(distDir);
+  } else {
+    return require(path.join(projectRootDir, './dist'));
+  }
 }
 
 module.exports = {getDist, loadDist, checkNodeVersion};

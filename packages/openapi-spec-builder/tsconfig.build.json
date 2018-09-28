@@ -2,16 +2,11 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "../build/config/tsconfig.common.json",
   "compilerOptions": {
-    "rootDir": ".",
+    "rootDir": "src",
     "composite": true,
     "target": "es2018",
     "outDir": "dist10"
   },
-  "include": [
-    "index.ts",
-    "src",
-    "test"
-  ],
   "references": [
     {
       "path": "../openapi-v3-types/tsconfig.build.json"

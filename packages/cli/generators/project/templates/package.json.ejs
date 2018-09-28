@@ -39,15 +39,15 @@
 <% } -%>
     "pretest": "npm run clean && npm run build",
 <% if (project.mocha) { -%>
-    "test": "lb-mocha --allow-console-logs \"DIST/test\"",
+    "test": "lb-mocha --allow-console-logs \"DIST/__tests__\"",
 <% } -%>
 <% if (project.prettier || project.tslint) { -%>
     "posttest": "npm run lint",
 <% } -%>
 <% if (project.mocha && (project.prettier || project.tslint)) { -%>
-    "test:dev": "lb-mocha --allow-console-logs DIST/test/**/*.js && npm run posttest",
+    "test:dev": "lb-mocha --allow-console-logs DIST/__tests__/**/*.js && npm run posttest",
 <% } else if (project.mocha) { -%>
-    "test:dev": "lb-mocha --allow-console-logs DIST/test/**/*.js",
+    "test:dev": "lb-mocha --allow-console-logs DIST/__tests__/**/*.js",
 <% } -%>
 <% if (project.projectType === 'application') { -%>
     "prestart": "npm run build",

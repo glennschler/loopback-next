@@ -18,7 +18,7 @@ Then the provided command is executed with the modified arguments.
 
 Example usage:
 
-  node ./bin/select-dist mocha DIST/test
+  node ./bin/select-dist mocha DIST/__tests__
 
 ========
 */

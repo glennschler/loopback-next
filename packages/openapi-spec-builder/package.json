@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=8.9"
   },
+  "types": "./dist10/index.d.ts",
   "scripts": {
     "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build:apidocs": "lb-apidocs",

@@ -108,7 +108,6 @@ function run(argv, options) {
         JSON.stringify(
           {
             extends: baseConfigFile,
-            include: ['src', 'test'],
             exclude: [
               'node_modules/**',
               'packages/*/node_modules/**',
@@ -139,14 +138,18 @@ function run(argv, options) {
     // to the same outDir as well.
     if (rootDir && tsConfigFile && !isIgnoreResourcesSet && !options.dryRun) {
       const tsConfig = require(tsConfigFile);
-      const dirs = tsConfig.include
-        ? tsConfig.include.join('|')
-        : ['src', 'test'].join('|');
+      const rootDir =
+        (tsConfig.compilerOptions && tsConfig.compilerOptions.rootDir) || 'src';
 
-      const pattern = `@(${dirs})/**/!(*.ts)`;
-      const files = glob.sync(pattern, {root: packageDir, nodir: true});
+      const pattern = `${rootDir}/**/!(*.ts)`;
+      const files = glob.sync(pattern, {
+        root: packageDir,
+        nodir: true,
+      });
+
       for (const file of files) {
-        fse.copySync(path.join(packageDir, file), path.join(outDir, file));
+        const target = file.substr(`${rootDir}/`.length);
+        fse.copySync(path.join(packageDir, file), path.join(outDir, target));
       }
     }
   }

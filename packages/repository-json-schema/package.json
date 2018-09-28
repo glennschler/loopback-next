@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=8.9"
   },
+  "types": "./dist10/index.d.ts",
   "scripts": {
     "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build:apidocs": "lb-apidocs",
@@ -13,7 +14,7 @@
     "build:dist10": "lb-tsc es2018",
     "clean": "lb-clean loopback-json-schema*.tgz dist* package api-docs",
     "pretest": "npm run build",
-    "test": "lb-mocha \"DIST/test/unit/**/*.js\" \"DIST/test/integration/**/*.js\" \"DIST/test/acceptance/**/*.js\"",
+    "test": "lb-mocha \"DIST/__tests__/unit/**/*.js\" \"DIST/__tests__/integration/**/*.js\" \"DIST/__tests__/acceptance/**/*.js\"",
     "verify": "npm pack && tar xf loopback-json-schema*.tgz && tree package && npm run clean"
   },
   "author": "IBM",
