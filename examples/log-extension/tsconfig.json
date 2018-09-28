@@ -9,13 +9,19 @@
   },
   "references": [
     {
-      "path": "../../packages/testlab/tsconfig.build.json"
+      "path": "../../packages/testlab/tsconfig.json"
     },
     {
-      "path": "../../packages/core/tsconfig.build.json"
+      "path": "../../packages/context/tsconfig.json"
     },
     {
-      "path": "../../packages/rest/tsconfig.build.json"
+      "path": "../../packages/core/tsconfig.json"
+    },
+    {
+      "path": "../../packages/openapi-v3/tsconfig.json"
+    },
+    {
+      "path": "../../packages/rest/tsconfig.json"
     }
   ]
 }

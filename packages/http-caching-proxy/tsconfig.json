@@ -9,7 +9,7 @@
   },
   "references": [
     {
-      "path": "../openapi-v3-types/tsconfig.build.json"
+      "path": "../testlab/tsconfig.json"
     }
   ]
 }

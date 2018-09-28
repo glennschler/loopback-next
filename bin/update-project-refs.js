@@ -21,7 +21,7 @@ const buildUtils = require('../packages/build/bin/utils');
 const Project = require('@lerna/project');
 const PackageGraph = require('@lerna/package-graph');
 
-const TSCONFIG = 'tsconfig.build.json';
+const TSCONFIG = 'tsconfig.json';
 
 async function updateReferences(options) {
   options = options || {};
@@ -71,7 +71,7 @@ async function updateReferences(options) {
     const tsconfigJson = JSON.stringify(tsconfig, null, 2);
 
     if (!dryRun) {
-      // Using `-f` to overwrite tsconfig.build.json
+      // Using `-f` to overwrite tsconfig.json
       fs.writeFileSync(tsconfigFile, tsconfigJson + '\n', {encoding: 'utf-8'});
       debug('%s has been updated.', tsconfigFile);
     } else {

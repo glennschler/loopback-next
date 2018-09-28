@@ -9,13 +9,7 @@
   },
   "references": [
     {
-      "path": "../testlab/tsconfig.build.json"
-    },
-    {
-      "path": "../context/tsconfig.build.json"
-    },
-    {
-      "path": "../core/tsconfig.build.json"
+      "path": "../openapi-v3-types/tsconfig.json"
     }
   ]
 }

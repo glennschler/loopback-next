@@ -9,25 +9,25 @@
   },
   "references": [
     {
-      "path": "../openapi-spec-builder/tsconfig.build.json"
+      "path": "../openapi-v3/tsconfig.json"
     },
     {
-      "path": "../testlab/tsconfig.build.json"
+      "path": "../rest/tsconfig.json"
     },
     {
-      "path": "../context/tsconfig.build.json"
+      "path": "../testlab/tsconfig.json"
     },
     {
-      "path": "../core/tsconfig.build.json"
+      "path": "../context/tsconfig.json"
     },
     {
-      "path": "../metadata/tsconfig.build.json"
+      "path": "../core/tsconfig.json"
     },
     {
-      "path": "../openapi-v3/tsconfig.build.json"
+      "path": "../repository/tsconfig.json"
     },
     {
-      "path": "../rest/tsconfig.build.json"
+      "path": "../service-proxy/tsconfig.json"
     }
   ]
 }

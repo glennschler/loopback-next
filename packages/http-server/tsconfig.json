@@ -9,10 +9,10 @@
   },
   "references": [
     {
-      "path": "../testlab/tsconfig.build.json"
+      "path": "../core/tsconfig.json"
     },
     {
-      "path": "../metadata/tsconfig.build.json"
+      "path": "../testlab/tsconfig.json"
     }
   ]
 }
