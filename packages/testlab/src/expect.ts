@@ -3,11 +3,10 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-/// <reference path="../should-as-function.d.ts" />
+const shouldAsFunction = require('should/as-function');
 
-const shouldAsFunction: Internal = require('should/as-function');
-
-shouldAsFunction.use((should, assertion) => {
+// tslint:disable-next-line:no-any
+shouldAsFunction.use((should: any, assertion: any) => {
   assertion.addChain('to');
 });
 

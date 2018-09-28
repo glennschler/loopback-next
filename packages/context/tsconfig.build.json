@@ -2,7 +2,22 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "../build/config/tsconfig.common.json",
   "compilerOptions": {
-    "rootDir": "."
+    "rootDir": ".",
+    "composite": true,
+    "target": "es2018",
+    "outDir": "dist10"
   },
-  "include": ["index.ts", "src", "test"]
+  "include": [
+    "index.ts",
+    "src",
+    "test"
+  ],
+  "references": [
+    {
+      "path": "../testlab/tsconfig.build.json"
+    },
+    {
+      "path": "../metadata/tsconfig.build.json"
+    }
+  ]
 }

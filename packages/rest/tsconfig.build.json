@@ -2,7 +2,40 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "../build/config/tsconfig.common.json",
   "compilerOptions": {
-    "rootDir": "."
+    "rootDir": ".",
+    "composite": true,
+    "target": "es2018",
+    "outDir": "dist10"
   },
-  "include": ["index.ts", "src", "test"]
+  "include": [
+    "index.ts",
+    "src",
+    "test"
+  ],
+  "references": [
+    {
+      "path": "../openapi-spec-builder/tsconfig.build.json"
+    },
+    {
+      "path": "../repository/tsconfig.build.json"
+    },
+    {
+      "path": "../testlab/tsconfig.build.json"
+    },
+    {
+      "path": "../context/tsconfig.build.json"
+    },
+    {
+      "path": "../core/tsconfig.build.json"
+    },
+    {
+      "path": "../http-server/tsconfig.build.json"
+    },
+    {
+      "path": "../openapi-v3/tsconfig.build.json"
+    },
+    {
+      "path": "../openapi-v3-types/tsconfig.build.json"
+    }
+  ]
 }

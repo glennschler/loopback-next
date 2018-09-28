@@ -1,15 +1,72 @@
 {
   "extends": "./packages/build/config/tsconfig.common.json",
-  "include": [
-    "benchmark",
-    "examples",
-    "packages"
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "benchmark/tsconfig.build.json"
+    },
+    {
+      "path": "examples/hello-world/tsconfig.build.json"
+    },
+    {
+      "path": "examples/log-extension/tsconfig.build.json"
+    },
+    {
+      "path": "examples/soap-calculator/tsconfig.build.json"
+    },
+    {
+      "path": "examples/todo-list/tsconfig.build.json"
+    },
+    {
+      "path": "examples/todo/tsconfig.build.json"
+    },
+    {
+      "path": "packages/authentication/tsconfig.build.json"
+    },
+    {
+      "path": "packages/boot/tsconfig.build.json"
+    },
+    {
+      "path": "packages/context/tsconfig.build.json"
+    },
+    {
+      "path": "packages/core/tsconfig.build.json"
+    },
+    {
+      "path": "packages/http-caching-proxy/tsconfig.build.json"
+    },
+    {
+      "path": "packages/http-server/tsconfig.build.json"
+    },
+    {
+      "path": "packages/metadata/tsconfig.build.json"
+    },
+    {
+      "path": "packages/openapi-spec-builder/tsconfig.build.json"
+    },
+    {
+      "path": "packages/openapi-v3-types/tsconfig.build.json"
+    },
+    {
+      "path": "packages/openapi-v3/tsconfig.build.json"
+    },
+    {
+      "path": "packages/repository-json-schema/tsconfig.build.json"
+    },
+    {
+      "path": "packages/repository/tsconfig.build.json"
+    },
+    {
+      "path": "packages/rest/tsconfig.build.json"
+    },
+    {
+      "path": "packages/service-proxy/tsconfig.build.json"
+    },
+    {
+      "path": "packages/testlab/tsconfig.build.json"
+    }
   ],
-  "exclude": [
-    "node_modules/**",
-    "benchmark/node_modules/**",
-    "examples/*/node_modules/**",
-    "packages/*/node_modules/**",
-    "**/*.d.ts"
-  ]
+  "files": []
 }
