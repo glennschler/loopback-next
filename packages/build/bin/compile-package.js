@@ -21,8 +21,7 @@ function run(argv, options) {
   const utils = require('./utils');
   const path = require('path');
   const fs = require('fs');
-  const glob = require('glob');
-  const fse = require('fs-extra');
+  const copyResources = require('./copy-resources');
 
   if (options === true) {
     options = {dryRun: true};
@@ -135,21 +134,14 @@ function run(argv, options) {
     // Since outDir is set, ts files are compiled into that directory.
     // If ignore-resources flag is not passed, copy resources (non-ts files)
     // to the same outDir as well.
-    if (rootDir && tsConfigFile && !isIgnoreResourcesSet && !options.dryRun) {
+    if (rootDir && tsConfigFile && !isIgnoreResourcesSet) {
       const tsConfig = require(tsConfigFile);
       const rootDir =
         (tsConfig.compilerOptions && tsConfig.compilerOptions.rootDir) || 'src';
-
-      const pattern = `${rootDir}/**/!(*.ts)`;
-      const files = glob.sync(pattern, {
-        root: packageDir,
-        nodir: true,
-      });
-
-      for (const file of files) {
-        const target = file.substr(`${rootDir}/`.length);
-        fse.copySync(path.join(packageDir, file), path.join(outDir, target));
-      }
+      copyResources(
+        [argv[0], argv[1], '--rootDir', rootDir, '--outDir', outDir],
+        options,
+      );
     }
   }
 

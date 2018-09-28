@@ -13,6 +13,7 @@
     "acceptance": "lb-mocha \"DIST/__tests__/acceptance/**/*.js\"",
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc",
+    "build:resources": "lb-copy-resources",
     "clean": "lb-clean loopback-boot*.tgz dist* package api-docs",
     "pretest": "npm run build",
     "integration": "lb-mocha \"DIST/__tests__/integration/**/*.js\"",
@@ -44,10 +45,7 @@
   "files": [
     "README.md",
     "index.js",
-    "index.js.map",
-    "index.d.ts",
-    "dist*/src",
-    "dist*/index*",
+    "dist",
     "src"
   ],
   "repository": {

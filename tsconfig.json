@@ -69,9 +69,6 @@
     },
     {
       "path": "packages/testlab/tsconfig.json"
-    },
-    {
-      "path": "sandbox/sandbox-app/tsconfig.json"
     }
   ],
   "files": []

@@ -18,6 +18,7 @@
   "scripts": {
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc",
+    "build:resources": "lb-copy-resources",
     "clean": "lb-clean loopback-openapi-v3*.tgz dist* package",
     "integration": "lb-mocha \"DIST/__tests__/integration/**/*.js\"",
     "pretest": "npm run build",
@@ -36,9 +37,7 @@
   "files": [
     "README.md",
     "index.js",
-    "index.d.ts",
-    "dist*/src",
-    "dist*/index*",
+    "dist",
     "src"
   ],
   "publishConfig": {

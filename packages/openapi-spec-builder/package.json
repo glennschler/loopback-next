@@ -9,6 +9,7 @@
   "scripts": {
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc",
+    "build:resources": "lb-copy-resources",
     "clean": "lb-clean loopback-openapi-spec-builder*.tgz dist* package api-docs",
     "verify": "npm pack && tar xf loopback-openapi-spec-builder*.tgz && tree package && npm run clean"
   },
@@ -33,9 +34,7 @@
   "files": [
     "README.md",
     "index.js",
-    "index.d.ts",
-    "dist*/src",
-    "dist*/index*",
+    "dist",
     "src"
   ],
   "repository": {

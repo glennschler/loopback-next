@@ -8,6 +8,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "lb-tsc",
+    "build:resources": "lb-copy-resources",
     "clean": "lb-clean loopback-testlab*.tgz dist* package api-docs",
     "pretest": "npm run build",
     "test": "lb-mocha \"DIST/__tests__\"",
@@ -38,9 +39,7 @@
   "files": [
     "README.md",
     "index.js",
-    "index.d.ts",
-    "dist*/src",
-    "dist*/index*",
+    "dist",
     "should-as-function.d.ts",
     "src"
   ],

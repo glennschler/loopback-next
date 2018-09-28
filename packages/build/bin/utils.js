@@ -208,6 +208,21 @@ function isOptionSet(opts, ...optionNames) {
 }
 
 /**
+ * Get the value of an option
+ * @param {string[]} opts Arguments
+ * @param {string} optionName Option name
+ */
+function getOptionValue(opts, optionName) {
+  for (let i = 0; i < opts.length; i++) {
+    if (opts[i] === `--${optionName}`) return opts[i + 1];
+    if (opts[i].startsWith(`--${optionName}=`)) {
+      return opts.substring(`--${optionName}=`.length);
+    }
+  }
+  return undefined;
+}
+
+/**
  * Remove options and their values from args
  */
 function removeOptions(args, ...options) {
@@ -236,4 +251,5 @@ exports.resolveCLI = resolveCLI;
 exports.runCLI = runCLI;
 exports.runShell = runShell;
 exports.isOptionSet = isOptionSet;
+exports.getOptionValue = getOptionValue;
 exports.removeOptions = removeOptions;

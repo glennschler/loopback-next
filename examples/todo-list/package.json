@@ -10,6 +10,7 @@
   "scripts": {
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc",
+    "build:resources": "lb-copy-resources",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean *example-todo-list*.tgz dist* package api-docs",
     "lint": "npm run prettier:check && npm run tslint",

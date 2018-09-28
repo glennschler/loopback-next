@@ -11,6 +11,7 @@
     "acceptance": "lb-mocha \"DIST/__tests__/acceptance/**/*.js\"",
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc",
+    "build:resources": "lb-copy-resources",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean *example-hello-world*.tgz dist* package api-docs",
     "verify": "npm pack && tar xf *example-hello-world*.tgz && tree package && npm run clean",
