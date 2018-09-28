@@ -60,7 +60,7 @@ describe('app-generator specific files', () => {
       /\'\@loopback\/rest\'/,
     );
     assert.fileContent(
-      'test/acceptance/ping.controller.acceptance.ts',
+      'src/__tests__/acceptance/ping.controller.acceptance.ts',
       /describe\('PingController'/,
     );
     assert.fileContent(

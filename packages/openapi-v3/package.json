@@ -5,7 +5,7 @@
   "engines": {
     "node": ">=8.9"
   },
-  "types": "./dist10/index.d.ts",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
     "@loopback/build": "^0.7.4",
     "@loopback/openapi-spec-builder": "^0.9.3",
@@ -16,11 +16,8 @@
     "@types/node": "^10.11.2"
   },
   "scripts": {
-    "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc",
-    "build:dist8": "lb-tsc es2017",
-    "build:dist10": "lb-tsc es2018",
     "clean": "lb-clean loopback-openapi-v3*.tgz dist* package",
     "integration": "lb-mocha \"DIST/__tests__/integration/**/*.js\"",
     "pretest": "npm run build",

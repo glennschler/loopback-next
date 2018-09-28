@@ -5,12 +5,9 @@
   "engines": {
     "node": ">=8.9"
   },
-  "types": "./dist10/index.d.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build": "lb-tsc",
-    "build:dist8": "lb-tsc es2017",
-    "build:dist10": "lb-tsc es2018",
     "clean": "lb-clean loopback-testlab*.tgz dist* package api-docs",
     "pretest": "npm run build",
     "test": "lb-mocha \"DIST/__tests__\"",

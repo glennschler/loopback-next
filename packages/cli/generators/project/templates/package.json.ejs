@@ -11,11 +11,8 @@
     "node": ">=8.9"
   },
   "scripts": {
-    "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc",
-    "build:dist8": "lb-tsc es2017",
-    "build:dist10": "lb-tsc es2018",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean dist*",
 <% if (project.prettier && project.tslint) { -%>

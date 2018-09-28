@@ -4,8 +4,8 @@
   "compilerOptions": {
     "rootDir": "src",
     "composite": true,
-    "target": "es2018",
-    "outDir": "dist10"
+    "target": "es2017",
+    "outDir": "dist"
   },
   "references": [
     {

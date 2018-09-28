@@ -17,7 +17,6 @@ Usage:
 
 function run(argv, options) {
   const utils = require('./utils');
-  const path = require('path');
 
   // Substitute the DIST variable with the dist folder
   const dist = utils.getDistribution();
@@ -43,7 +42,7 @@ function run(argv, options) {
     // Fail any tests that are printing to console.
     mochaOpts.unshift(
       '--require',
-      require.resolve('../src/fail-on-console-logs'),
+      require.resolve('../lib/fail-on-console-logs'),
     );
   } else {
     // Allow tests to print to console, remove --allow-console-logs argument

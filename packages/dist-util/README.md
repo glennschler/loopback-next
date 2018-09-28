@@ -5,10 +5,10 @@ Utilities to work with `dist` folders used by different Node.js versions.
 | version | directory       |
 | ------- | --------------- |
 | 6.x LTS | _not supported_ |
-| 8.x LTS | `dist8`         |
-| 9.x     | `dist8`         |
-| 10.x    | `dist10`        |
-| newer   | `dist10`        |
+| 8.x LTS | `dist`          |
+| 9.x     | `dist`          |
+| 10.x    | `dist`          |
+| newer   | `dist`          |
 
 ## Installation
 
@@ -22,14 +22,14 @@ $ npm install @loopback/dist-util
 
 Configure your TypeScript build to produce two distribution versions:
 
-- `dist8` compiled for `es2017` target
+- `dist` compiled for `es2017` target
 - `dist10` compiled for `es2018` target
 
 Put the following line to your main `index.js` file:
 
 ```js
 module.exports = require('@loopback/dist-util').loadDist(__dirname);
-// calls `require(__dirname + '/dist8')` or `require(__dirname + '/dist10')`
+// calls `require(__dirname + '/dist')`
 ```
 
 It is also possible to obtain the name of the correct `dist` directory without
@@ -38,7 +38,7 @@ loading the dist files:
 ```js
 const dist = require('@loopback/dist-util').getDist();
 console.log(dist);
-// prints `dist8` or `dist10`
+// prints `dist` or `dist`
 ```
 
 ## Contributions

@@ -17,7 +17,7 @@ const debug = require('debug')('loopback:build');
 function getCompilationTarget() {
   const nodeMajorVersion = +process.versions.node.split('.')[0];
   return nodeMajorVersion >= 10
-    ? 'es2018'
+    ? 'es2017'
     : nodeMajorVersion >= 7
       ? 'es2017'
       : 'es2015';
@@ -37,7 +37,7 @@ function getDistribution(target) {
       dist = 'dist10';
       break;
     case 'es2017':
-      dist = 'dist8';
+      dist = 'dist';
       break;
     case 'es2015':
       dist = 'dist6';

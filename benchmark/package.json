@@ -8,15 +8,12 @@
     "performance",
     "benchmark"
   ],
-  "types": "./dist10/index.d.ts",
+  "types": "./dist/index.d.ts",
   "engines": {
     "node": ">=8.9"
   },
   "scripts": {
-    "build:all-dist": "npm run build:dist8 && npm run build:dist10",
     "build": "lb-tsc",
-    "build:dist8": "lb-tsc es2017",
-    "build:dist10": "lb-tsc es2018",
     "clean": "lb-clean dist*",
     "pretest": "npm run clean && npm run build",
     "test": "lb-mocha \"DIST/__tests__\"",

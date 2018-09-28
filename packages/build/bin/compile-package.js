@@ -10,7 +10,7 @@
 Usage:
   node ./bin/compile-package <target>
 
-Where <target> is one of es2015, es2017 or es2018.
+Where <target> is one of es2015, es2017 or es2017.
 
 ========
 */
@@ -108,12 +108,11 @@ function run(argv, options) {
         JSON.stringify(
           {
             extends: baseConfigFile,
-            exclude: [
-              'node_modules/**',
-              'packages/*/node_modules/**',
-              'examples/*/node_modules/**',
-              '**/*.d.ts',
-            ],
+            compilerOptions: {
+              target: 'es2017',
+              outDir: 'dist',
+            },
+            exclude: ['**/*.d.ts'],
           },
           null,
           '  ',
