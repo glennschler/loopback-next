@@ -38,12 +38,6 @@
     "Decorators",
     "Reflect"
   ],
-  "files": [
-    "README.md",
-    "index.js",
-    "dist",
-    "src"
-  ],
   "publishConfig": {
     "access": "public"
   },

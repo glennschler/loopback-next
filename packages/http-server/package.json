@@ -31,12 +31,6 @@
     "@types/request-promise-native": "^1.0.15",
     "request-promise-native": "^1.0.5"
   },
-  "files": [
-    "README.md",
-    "index.js",
-    "dist",
-    "src"
-  ],
   "publishConfig": {
     "access": "public"
   },

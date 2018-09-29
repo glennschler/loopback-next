@@ -26,12 +26,6 @@
   },
   "author": "",
   "license": "MIT",
-  "files": [
-    "README.md",
-    "index.js",
-    "dist",
-    "src"
-  ],
   "dependencies": {
     "@loopback/dist-util": "^0.3.7",
     "@loopback/example-todo": "^0.20.2",

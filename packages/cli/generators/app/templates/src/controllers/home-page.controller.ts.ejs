@@ -8,7 +8,7 @@ export class HomePageController {
   private html: string;
   constructor(@inject(RestBindings.Http.RESPONSE) private response: Response) {
     this.html = fs.readFileSync(
-      path.join(__dirname, '../../../public/index.html'),
+      path.join(__dirname, '../../public/index.html'),
       'utf-8',
     );
   }

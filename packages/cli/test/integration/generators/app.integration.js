@@ -72,11 +72,11 @@ describe('app-generator specific files', () => {
       /homePage\(\)/,
     );
     assert.fileContent(
-      'test/acceptance/home-page.controller.acceptance.ts',
+      'src/__tests__/acceptance/home-page.controller.acceptance.ts',
       /describe\('HomePageController'/,
     );
     assert.fileContent(
-      'test/acceptance/test-helper.ts',
+      'src/__tests__/acceptance/test-helper.ts',
       /export async function setupApplication/,
     );
   });

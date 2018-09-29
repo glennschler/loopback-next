@@ -9,11 +9,6 @@
   "engines": {
     "node": ">=8.9"
   },
-  "files": [
-    "bin",
-    "lib",
-    "generators"
-  ],
   "bin": {
     "lb4": "bin/cli-main.js"
   },
