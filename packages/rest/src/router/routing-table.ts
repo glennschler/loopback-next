@@ -27,15 +27,14 @@ import {
   OperationRetval,
 } from '../types';
 
-import {ControllerSpec} from '@loopback/openapi-v3';
+import {ControllerSpec, toOpenApiPath} from '@loopback/openapi-v3';
 
 import * as assert from 'assert';
 const debug = require('debug')('loopback:rest:routing-table');
 
-const wayfarer = require('wayfarer');
-const walk = require('wayfarer/walk');
-
 import {CoreBindings} from '@loopback/core';
+
+import {Trie} from './trie';
 
 /**
  * A controller instance with open properties/methods
@@ -60,7 +59,7 @@ export type ControllerClass<T extends ControllerInstance> = Constructor<T>;
  * Routing table
  */
 export class RoutingTable {
-  private readonly _router = wayfarer();
+  private readonly _router = new Trie<RouteEntry>();
 
   /**
    * Register a controller as the route
@@ -126,22 +125,23 @@ export class RoutingTable {
       );
     }
     // Add the route to the trie
-    const path = route.path.startsWith('/') ? route.path : `/${route.path}`;
+    let path = route.path.startsWith('/') ? route.path : `/${route.path}`;
     const verb = route.verb.toLowerCase() || 'get';
-    this._router.on(`/${verb}${path}`, (params: object) => ({route, params}));
+    path = toOpenApiPath(path);
+    this._router.create(`/${verb}${path}`, route);
   }
 
   describeApiPaths(): PathObject {
     const paths: PathObject = {};
 
-    walk(this._router, (r: unknown, cb: Function) => {
-      const route = cb().route;
+    for (const node of this._router.list()) {
+      const route = node.value;
       if (!paths[route.path]) {
         paths[route.path] = {};
       }
 
       paths[route.path][route.verb] = route.spec;
-    });
+    }
 
     return paths;
   }
@@ -154,18 +154,16 @@ export class RoutingTable {
     debug('Finding route %s for %s %s', request.method, request.path);
     const method = request.method.toLowerCase();
     const path = `/${method}${request.path}`;
-    try {
-      const found = this._router(path);
-      debug('Route matched: %j', found);
 
-      if (found) {
-        const route = found.route;
+    const found = this._router.match(path);
+    debug('Route matched: %j', found);
+
+    if (found) {
+      const route = found.node.value;
+      if (route) {
         debug('Route found: %s', inspect(route, {depth: 5}));
-        return createResolvedRoute(route, found.params);
+        return createResolvedRoute(route, found.params || {});
       }
-    } catch (err) {
-      debug('Match failed:', err);
-      // Ignore the error, will report as NotFound
     }
 
     debug('No route found for %s %s', request.method, request.path);
@@ -244,10 +242,6 @@ export abstract class BaseRoute implements RouteEntry {
     public readonly spec: OperationObject,
   ) {
     this.verb = verb.toLowerCase();
-
-    // In Swagger, path parameters are wrapped in `{}`.
-    // In Express.js, path parameters are prefixed with `:`
-    this.path = path.replace(/{([A-Za-z0-9_]*)}/g, ':$1');
   }
 
   abstract updateBindings(requestContext: Context): void;

@@ -18,6 +18,8 @@ export {
   createControllerFactoryForInstance,
 } from './router/routing-table';
 
+export {Trie} from './router/trie';
+
 export * from './providers';
 
 export * from './parser';
