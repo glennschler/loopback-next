@@ -13,20 +13,18 @@ integrations.
 - Define your data and endpoints with OpenAPI
 - No maintenance of generated code
 
-## Status: Developer Preview #3
+## Status: General Availability
 
-LoopBack 4 is a work in progress, the public API is frequently changed in
-backward incompatible ways. See
-[Upcoming-Releases on wiki](https://github.com/strongloop/loopback-next/wiki/Upcoming-Releases)
-for more details.
+LoopBack 4 has GA'ed. 
+
+The documentation website is https://loopback.io/doc/en/lb4/.
 
 Learn about the latest and greatest
 [features and technologies in LoopBack 4](https://loopback.io/doc/en/lb4/Crafting-LoopBack-4.html)
 by using it for your next project. Start by having a look at
 [Getting Started](https://loopback.io/doc/en/lb4/Getting-started.html).
 
-**NOTE:** _It is not recommended for production use yet._ For production, use
-[LoopBack 3](https://loopback.io/doc/en/lb3/index.html).
+Check the [API documentation](http://apidocs.loopback.io/@loopback%2fdocs/apidocs.html) for all the API usages in each package.
 
 ## Installation
 
