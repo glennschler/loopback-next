@@ -34,6 +34,7 @@ import {anOpenApiSpec, anOperationSpec} from '@loopback/openapi-spec-builder';
 import {inject, Context, BindingScope} from '@loopback/context';
 
 import {createUnexpectedHttpErrorLogger} from '../../helpers';
+import {TrieRouter} from '../../../src';
 
 /* # Feature: Routing
  * - In order to build REST APIs
@@ -701,7 +702,16 @@ describe('Routing', () => {
         .expect(200, 'hello');
     });
 
-    it('sorts routes based on their specifics', async () => {
+    it('allows pluggable router', async () => {
+      const app = new RestApplication();
+      app.bind(RestBindings.ROUTER).toClass(TrieRouter);
+      const server = await app.getServer(RestServer);
+      const handler = await server.get(RestBindings.HANDLER);
+      // tslint:disable-next-line:no-any
+      expect((handler as any)._routes._router).to.be.instanceof(TrieRouter);
+    });
+
+    it('matches routes based on their specifics', async () => {
       const app = new RestApplication();
 
       app.route(
