@@ -704,43 +704,28 @@ describe('Routing', () => {
     it('sorts routes based on their specifics', async () => {
       const app = new RestApplication();
 
-      class MyController {
-        greet(name: string) {
-          return `hello ${name}`;
-        }
+      app.route(
+        'get',
+        '/greet/{name}',
+        anOperationSpec()
+          .withParameter({name: 'name', in: 'path', type: 'string'})
+          .build(),
+        (name: string) => `hello ${name}`,
+      );
 
-        greetWorld() {
-          return `hello WORLD`;
-        }
-      }
-
-      const spec = anOpenApiSpec()
-        .withOperation(
-          'get',
-          '/greet/{name}',
-          anOperationSpec()
-            .withParameter({name: 'name', in: 'path', type: 'string'})
-            .withExtension('x-operation-name', 'greet')
-            .withExtension('x-controller-name', 'MyController'),
-        )
-        .withOperation(
-          'get',
-          '/greet/world',
-          anOperationSpec()
-            .withExtension('x-operation-name', 'greetWorld')
-            .withExtension('x-controller-name', 'MyController'),
-        )
-        .build();
-
-      app.api(spec);
-      app.controller(MyController);
+      app.route(
+        'get',
+        '/greet/world',
+        anOperationSpec().build(),
+        () => 'HELLO WORLD',
+      );
 
       await whenIMakeRequestTo(app)
         .get('/greet/john')
         .expect(200, 'hello john');
       await whenIMakeRequestTo(app)
         .get('/greet/world')
-        .expect(200, 'hello WORLD');
+        .expect(200, 'HELLO WORLD');
     });
   });
 
