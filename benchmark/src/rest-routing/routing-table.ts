@@ -4,59 +4,21 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {anOpenApiSpec} from '@loopback/openapi-spec-builder';
-import {RoutingTable} from '@loopback/rest';
-import * as pathToRegExp from 'path-to-regexp';
+import {
+  RoutingTable,
+  TrieRouter,
+  RestRouter,
+  RegExpRouter,
+  OpenApiSpec,
+} from '@loopback/rest';
 
-function runBenchmark() {
-  const count = 1000;
-  let table: RoutingTable;
-  const trieTest = () => {
-    const spec = givenNumberOfRoutes('/hello', count);
+function runBenchmark(count = 1000) {
+  const spec = givenNumberOfRoutes('/hello', count);
 
-    class TestController {}
-
-    table = new RoutingTable();
-    table.registerController(spec, TestController);
-
-    const start = process.hrtime();
-    for (let i = 0; i < count; i++) {
-      // tslint:disable-next-line:no-any
-      const request: any = {
-        method: 'get',
-        path: `/my/hello/${i % 16}/version_${i}`,
-      };
-
-      try {
-        const r = table.find(request);
-      } catch (e) {
-        // ignore
-      }
-    }
-    console.log('trie', process.hrtime(start));
-  };
-
-  const regexpTest = () => {
-    const routes = givenNumberOfExpressRoutes('/my/hello', count);
-
-    const start = process.hrtime();
-    for (let i = 0; i < count; i++) {
-      // tslint:disable-next-line:no-any
-      const request: any = {
-        method: 'get',
-        path: `/my/hello/${i % 16}/version_${i}`,
-      };
-
-      for (const r of routes) {
-        if (request.method === r.verb && request.path.match(r.path)) {
-          break;
-        }
-      }
-    }
-    console.log('regexp', process.hrtime(start));
-  };
+  const trieTest = givenRouter(new TrieRouter(), spec, count);
+  const regexpTest = givenRouter(new RegExpRouter(), spec, count);
 
   trieTest();
-
   regexpTest();
 }
 
@@ -81,23 +43,36 @@ function givenNumberOfRoutes(base: string, num: number) {
   return result;
 }
 
-function givenNumberOfExpressRoutes(base: string, num: number) {
-  const routes = [];
-  let i = 0;
-  while (i < num) {
-    routes.push({
-      verb: 'get',
-      path: pathToRegExp(`${base}/${i % 8}/version_${i}`, [], {end: true}),
-      operation: 'greet',
-    });
-    i++;
-  }
-  routes.push({
-    verb: 'get',
-    path: pathToRegExp(`${base}/:group/:version}`, [], {end: true}),
-    operation: 'greet',
-  });
-  return routes;
+function givenRouter(router: RestRouter, spec: OpenApiSpec, count: number) {
+  const name = router.constructor.name;
+  class TestController {}
+
+  return () => {
+    console.log('Creating %s, %d', name, count);
+    let start = process.hrtime();
+
+    const table = new RoutingTable(router);
+    table.registerController(spec, TestController);
+    router.list(); // Force sorting
+    console.log('Created %s %s', name, process.hrtime(start));
+
+    console.log('\nStarting %s %d', name, count);
+    start = process.hrtime();
+    for (let i = 0; i < count; i++) {
+      // tslint:disable-next-line:no-any
+      const request: any = {
+        method: 'get',
+        path: `/my/hello/${i % 16}/version_${i}`,
+      };
+
+      try {
+        table.find(request);
+      } catch (e) {
+        // ignore
+      }
+    }
+    console.log('Done %s %s\n', name, process.hrtime(start));
+  };
 }
 
-runBenchmark();
+runBenchmark(+process.argv[2] || 1000);

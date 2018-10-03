@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2017. All Rights Reserved.
+// Copyright IBM Corp. 2017, 2018. All Rights Reserved.
 // Node module: @loopback/rest
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -27,14 +27,14 @@ import {
   OperationRetval,
 } from '../types';
 
-import {ControllerSpec, toOpenApiPath} from '@loopback/openapi-v3';
+import {ControllerSpec} from '@loopback/openapi-v3';
 
 import * as assert from 'assert';
 const debug = require('debug')('loopback:rest:routing-table');
 
 import {CoreBindings} from '@loopback/core';
 
-import {Trie} from './trie';
+import {TrieRouter} from './trie-router';
 
 /**
  * A controller instance with open properties/methods
@@ -56,10 +56,27 @@ export type ControllerFactory<T extends ControllerInstance> = (
 export type ControllerClass<T extends ControllerInstance> = Constructor<T>;
 
 /**
+ * Interface for router implementation
+ */
+export interface RestRouter {
+  // Add a route entry
+  add(route: RouteEntry): void;
+  // Find a matching route entry
+  find(request: Request): ResolvedRoute | undefined;
+  list(): RouteEntry[];
+}
+
+/**
  * Routing table
  */
 export class RoutingTable {
-  private readonly _router = new Trie<RouteEntry>();
+  private readonly _router: RestRouter = new TrieRouter();
+
+  constructor(router?: RestRouter) {
+    if (router) {
+      this._router = router;
+    }
+  }
 
   /**
    * Register a controller as the route
@@ -125,17 +142,13 @@ export class RoutingTable {
       );
     }
     // Add the route to the trie
-    let path = route.path.startsWith('/') ? route.path : `/${route.path}`;
-    const verb = route.verb.toLowerCase() || 'get';
-    path = toOpenApiPath(path);
-    this._router.create(`/${verb}${path}`, route);
+    this._router.add(route);
   }
 
   describeApiPaths(): PathObject {
     const paths: PathObject = {};
 
-    for (const node of this._router.list()) {
-      const route = node.value;
+    for (const route of this._router.list()) {
       if (!paths[route.path]) {
         paths[route.path] = {};
       }
@@ -152,18 +165,12 @@ export class RoutingTable {
    */
   find(request: Request): ResolvedRoute {
     debug('Finding route %s for %s %s', request.method, request.path);
-    const method = request.method.toLowerCase();
-    const path = `/${method}${request.path}`;
 
-    const found = this._router.match(path);
-    debug('Route matched: %j', found);
+    const found = this._router.find(request);
 
     if (found) {
-      const route = found.node.value;
-      if (route) {
-        debug('Route found: %s', inspect(route, {depth: 5}));
-        return createResolvedRoute(route, found.params || {});
-      }
+      debug('Route matched: %j', found);
+      return found;
     }
 
     debug('No route found for %s %s', request.method, request.path);

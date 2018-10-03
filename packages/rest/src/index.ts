@@ -3,22 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-export {
-  RouteEntry,
-  RoutingTable,
-  Route,
-  ControllerRoute,
-  ResolvedRoute,
-  createResolvedRoute,
-  ControllerClass,
-  ControllerInstance,
-  ControllerFactory,
-  createControllerFactoryForBinding,
-  createControllerFactoryForClass,
-  createControllerFactoryForInstance,
-} from './router/routing-table';
-
-export {Trie} from './router/trie';
+export * from './router';
 
 export * from './providers';
 

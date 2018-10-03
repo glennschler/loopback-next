@@ -5,7 +5,6 @@
 
 import {Trie} from '../../..';
 import {expect} from '@loopback/testlab';
-import {ResolvedNode} from '../../../src/router/trie';
 
 interface Route {
   path: string;
