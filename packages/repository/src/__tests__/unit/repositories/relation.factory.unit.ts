@@ -13,7 +13,7 @@ import {
   juggler,
   ModelDefinition,
   RelationType,
-} from '../../..';
+} from '../../../';
 
 describe('createHasManyRepositoryFactory', () => {
   let customerRepo: CustomerRepository;

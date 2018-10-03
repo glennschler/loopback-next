@@ -23,7 +23,7 @@ import {
   ValueObject,
 } from '../../../';
 import {MetadataInspector} from '@loopback/context';
-import {RelationDefinitionMap} from '../../../src';
+import {RelationDefinitionMap} from '../../../';
 
 describe('model decorator', () => {
   @model()
