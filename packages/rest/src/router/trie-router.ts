@@ -5,7 +5,6 @@
 
 import {RestRouter, RouteEntry, createResolvedRoute} from './routing-table';
 import {Trie} from './trie';
-import {toOpenApiPath} from '@loopback/openapi-v3';
 import {Request} from '../types';
 import {inspect} from 'util';
 
@@ -20,7 +19,6 @@ export class TrieRouter implements RestRouter {
     // Add the route to the trie
     let path = route.path.startsWith('/') ? route.path : `/${route.path}`;
     const verb = route.verb.toLowerCase() || 'get';
-    path = toOpenApiPath(path);
     this.trie.create(`/${verb}${path}`, route);
   }
 

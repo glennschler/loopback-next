@@ -35,6 +35,7 @@ const debug = require('debug')('loopback:rest:routing-table');
 import {CoreBindings} from '@loopback/core';
 
 import {TrieRouter} from './trie-router';
+import {validatePath} from './openapi-path';
 
 /**
  * A controller instance with open properties/methods
@@ -141,6 +142,8 @@ export class RoutingTable {
         describeOperationParameters(route.spec),
       );
     }
+
+    validatePath(route.path);
     // Add the route to the trie
     this._router.add(route);
   }
