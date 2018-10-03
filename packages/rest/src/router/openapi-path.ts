@@ -59,3 +59,10 @@ export function toOpenApiPath(path: string = '/') {
   validatePath(path);
   return path;
 }
+
+/**
+ * Get all path variables
+ */
+export function getPathVariables(path: string) {
+  return path.match(POSSIBLE_VARNAME_PATTERN);
+}

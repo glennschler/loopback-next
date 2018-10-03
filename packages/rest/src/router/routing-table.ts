@@ -33,9 +33,8 @@ import * as assert from 'assert';
 const debug = require('debug')('loopback:rest:routing-table');
 
 import {CoreBindings} from '@loopback/core';
-
-import {TrieRouter} from './trie-router';
 import {validatePath} from './openapi-path';
+import {RegExpRouter} from './regexp-router';
 
 /**
  * A controller instance with open properties/methods
@@ -61,7 +60,7 @@ export type ControllerClass<T extends ControllerInstance> = Constructor<T>;
  */
 export interface RestRouter {
   // Add a route entry
-  add(route: RouteEntry): void;
+  add(route: RouteEntry): boolean;
   // Find a matching route entry
   find(request: Request): ResolvedRoute | undefined;
   list(): RouteEntry[];
@@ -71,7 +70,7 @@ export interface RestRouter {
  * Routing table
  */
 export class RoutingTable {
-  private readonly _router: RestRouter = new TrieRouter();
+  private readonly _router: RestRouter = new RegExpRouter();
 
   constructor(router?: RestRouter) {
     if (router) {

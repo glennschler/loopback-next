@@ -29,15 +29,18 @@ function givenNumberOfRoutes(base: string, num: number) {
     spec.withOperationReturningString(
       'get',
       `${base}/${i % 8}/version_${i}`,
-      'greet',
+      `greet${i}`,
     );
+    // Add 1/8 paths with vars
+    if (i % 8 === 0) {
+      spec.withOperationReturningString(
+        'get',
+        `${base}/group${i}/{version}`,
+        `greet${i}`,
+      );
+    }
     i++;
   }
-  spec.withOperationReturningString(
-    'get',
-    `${base}/{group}/{version}`,
-    'greet',
-  );
   const result = spec.build();
   result.basePath = '/my';
   return result;

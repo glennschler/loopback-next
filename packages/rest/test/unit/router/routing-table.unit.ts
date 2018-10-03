@@ -106,6 +106,46 @@ describe('RoutingTable', () => {
     expect(route.describe()).to.equal('TestController.greet');
   });
 
+  it('finds simple "GET /my/hello" endpoint', () => {
+    const spec = anOpenApiSpec()
+      .withOperationReturningString('get', '/add/{arg1}/{arg2}', 'add')
+      .withOperationReturningString(
+        'get',
+        '/subtract/{arg1}/{arg2}',
+        'subtract',
+      )
+      .build();
+
+    // @jannyHou: please note ` anOpenApiSpec()` returns an openapi spec,
+    // not controller spec, should be FIXED
+    // the routing table test expects an empty spec for
+    // interface `ControllerSpec`
+    spec.basePath = '/my';
+
+    class TestController {}
+
+    const table = new RoutingTable();
+    table.registerController(spec, TestController);
+
+    let request = givenRequest({
+      method: 'get',
+      url: '/my/add/1/2',
+    });
+
+    let route = table.find(request);
+    expect(route.path).to.eql('/my/add/{arg1}/{arg2}');
+    expect(route.pathParams).to.containEql({arg1: '1', arg2: '2'});
+
+    request = givenRequest({
+      method: 'get',
+      url: '/my/subtract/3/2',
+    });
+
+    route = table.find(request);
+    expect(route.path).to.eql('/my/subtract/{arg1}/{arg2}');
+    expect(route.pathParams).to.containEql({arg1: '3', arg2: '2'});
+  });
+
   function givenRequest(options?: ShotRequestOptions): Request {
     return stubExpressContext(options).request;
   }

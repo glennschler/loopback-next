@@ -59,7 +59,9 @@ export class Trie<T> {
   match(path: string): ResolvedNode<T> | undefined {
     const keys = path.split('/').filter(Boolean);
     const params = {};
-    return search(keys, 0, params, this.root);
+    const resolved = search(keys, 0, params, this.root);
+    if (resolved && resolved.node.value != null) return resolved;
+    else return undefined;
   }
 
   /**

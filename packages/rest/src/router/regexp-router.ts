@@ -3,16 +3,12 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {
-  RestRouter,
-  RouteEntry,
-  createResolvedRoute,
-  ResolvedRoute,
-} from './routing-table';
+import {RouteEntry, createResolvedRoute, ResolvedRoute} from './routing-table';
 import {Request, PathParameterValues} from '../types';
 import {inspect} from 'util';
 import {compareRoute} from './route-sort';
 import pathToRegExp = require('path-to-regexp');
+import {BaseRouter} from './router-base';
 
 const debug = require('debug')('loopback:rest:router:regexp');
 
@@ -27,7 +23,7 @@ interface RegExpRouteEntry extends RouteEntry {
 /**
  * Router implementation based on regexp matching
  */
-export class RegExpRouter implements RestRouter {
+export class RegExpRouter extends BaseRouter {
   private routes: RegExpRouteEntry[] = [];
 
   private _sorted: boolean;
@@ -39,6 +35,7 @@ export class RegExpRouter implements RestRouter {
   }
 
   add(route: RouteEntry) {
+    if (super.add(route)) return true;
     // Add the route
     const entry = route as RegExpRouteEntry;
     this.routes.push(entry);
@@ -46,9 +43,12 @@ export class RegExpRouter implements RestRouter {
     entry.keys = [];
     entry.regexp = pathToRegExp(path, entry.keys, {strict: false, end: true});
     this._sorted = false;
+    return true;
   }
 
   find(request: Request): ResolvedRoute | undefined {
+    const found = super.find(request);
+    if (found) return found;
     this._sort();
     for (const r of this.routes) {
       debug('trying endpoint %s', inspect(r, {depth: 5}));
@@ -60,7 +60,7 @@ export class RegExpRouter implements RestRouter {
       const match = r.regexp!.exec(request.path);
       if (!match) {
         debug(' -> path mismatch');
-        return undefined;
+        continue;
       }
 
       const pathParams = this._buildPathParams(r, match);
@@ -68,11 +68,13 @@ export class RegExpRouter implements RestRouter {
 
       return createResolvedRoute(r, pathParams);
     }
+    return undefined;
   }
 
   list() {
+    const basicRoutes = Object.values(this.simpleRoutes);
     this._sort();
-    return this.routes;
+    return basicRoutes.concat(this.routes);
   }
 
   private _buildPathParams(
