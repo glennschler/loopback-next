@@ -26,6 +26,8 @@ by using it for your next project. Start by having a look at
 
 Check the [API documentation](http://apidocs.loopback.io/@loopback%2fdocs/apidocs.html) for all the API usages in each package.
 
+[LoopBack 3](https://loopback.io/doc/en/lb3/) becomes active LTS version, and [LoopBack 2](https://loopback.io/doc/en/lb2/) is maintenance LTS. The long term support policy can be found here: https://loopback.io/doc/en/contrib/Long-term-support.html
+
 ## Installation
 
 Make sure you have the following installed:
